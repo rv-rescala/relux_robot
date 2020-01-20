@@ -4,6 +4,7 @@ from rlx.site.japan_ranking import JapanRankingSite
 from rlx.site.detail import DetailSite
 from catscore.http.request import CatsRequest
 from catscore.lib.time import get_today_date
+import csv
 
 def main():
     parser = argparse.ArgumentParser(description="relux robot")
@@ -19,7 +20,7 @@ def main():
         if f == "japan_ranking":
             output_path = f"{args.dump_path}/relux/japan_ranking_{get_today_date()}.csv"
             result = JapanRankingSite(request).all_category_ranking(pandas=True)
-            result.to_csv(output_path)
+            result.to_csv(output_path, quoting=csv.QUOTE_ALL)
     request.close()
 if __name__ == "__main__":
     main()

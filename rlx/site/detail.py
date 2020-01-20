@@ -14,9 +14,8 @@ class DetailSite:
 
     @property
     def introduction(self):
-        return self.soup.find("pre", {"class": "introduction"}).text
+        return self.soup.find("pre", {"class": "introduction"}).text.replace("\n","")
     
     @property
     def review_score(self):
         return self.soup.find("div", {"class": "review_table"}).find("svg").find("text").text
-        

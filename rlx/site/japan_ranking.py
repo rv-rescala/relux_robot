@@ -51,7 +51,7 @@ class JapanRankingSite:
             hotel_area = info.find("p", {"class": "area"}).text.replace("\n","").replace(" ","")
             hotel_copy = info.find("p", {"class": "copy"}).text.replace("\n","").replace(" ","")
             detail = DetailSite(self.request, hotel_detail_link)
-            hotel_introduction = detail.introduction
+            hotel_introduction = detail.introduction.replace("\n","").replace(" ","")
             hotel_review_score = detail.review_score
             return RankedItem(
                 rank_keyword=keyword,
