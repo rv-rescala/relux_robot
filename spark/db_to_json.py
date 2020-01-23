@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 import argparse
 from pyspark import SparkConf
 from pyspark.sql import SparkSession
@@ -17,7 +15,7 @@ def main():
 
     # init
     parser = argparse.ArgumentParser(description='pyspark app args')
-    parser.add_argument('-ip', '--input_path', type=str, required=True, help='input folder path')
+    parser.add_argument('-op', '--output_path', type=str, required=True, help='input folder path')
     parser.add_argument('-db', '--db_conf', type=str, required=True, help='input db conf path')
     parser.add_argument('-mc', '--mecab_conf', type=str, required=True, help='input db conf path')
     args = parser.parse_args()
@@ -27,15 +25,10 @@ def main():
     print(f"mysql_conf {mysql_conf}")
     ## mecab
     mecab = CatsMeCab.from_json(args.mecab_conf)
-    
+
     # convert
-    # step1
-    ranked_item_df = RankedItemTable.from_file_as_df(spark, args.input_path).drop("update_date").distinct()
-    RankedItemTable.to_db(spark=spark, df=ranked_item_df, mysql_conf=mysql_conf)
-    
-    # step2
-    cooked_ranked_item = RankedItemTable.cooking(spark=spark, df=ranked_item_df, mecab_dict=mecab.dict_path)
-    CookedRankedItemTable.to_db(spark=spark, df=cooked_ranked_item, mysql_conf=mysql_conf)
+    CookedRankedItemTable.to_json(spark=spark, mysql_conf=mysql_conf, output_path=args.output_path)
+
     
 if __name__ == '__main__':
     main()
